@@ -5,40 +5,39 @@ import Layout from './components/Layout';
 import MainContent from './pages/MainContent';
 import Technology from "./pages/Technology";
 
-// Tạo theme với màu chủ đạo là xanh lá cây
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#4CAF50', // Màu xanh lá cây chủ đạo
-            dark: '#388E3C', // Màu xanh lá cây đậm hơn
-            light: '#C8E6C9', // Màu xanh lá cây nhạt hơn
+            main: '#4CAF50',
+            dark: '#388E3C',
+            light: '#C8E6C9',
         },
         secondary: {
-            main: '#8BC34A', // Màu phụ (có thể là một tông xanh lá cây nhạt khác)
+            main: '#8BC34A',
         },
         background: {
-            default: '#F1F8E9', // Màu nền nhạt
+            default: '#F1F8E9',
         },
         text: {
-            primary: '#1B5E20', // Màu văn bản chính (màu xanh lá cây đậm)
-            secondary: '#4E342E', // Màu văn bản phụ (màu nâu đậm hoặc đen)
+            primary: '#1B5E20',
+            secondary: '#4E342E',
         },
     },
     typography: {
-        fontFamily: 'Arial, sans-serif', // Chọn font phù hợp cho toàn bộ trang web
+        fontFamily: 'Arial, sans-serif',
         h1: {
             fontSize: '2rem',
             fontWeight: 700,
-            color: '#1B5E20', // Màu xanh lá cây đậm
+            color: '#1B5E20',
         },
         h2: {
             fontSize: '1.75rem',
             fontWeight: 600,
-            color: '#1B5E20', // Màu xanh lá cây đậm
+            color: '#1B5E20',
         },
         body1: {
             fontSize: '1rem',
-            color: '#4E342E', // Màu nâu đậm cho nội dung văn bản
+            color: '#4E342E',
         },
     },
 });
@@ -46,7 +45,8 @@ const theme = createTheme({
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
-            <Router>
+            {/* Thêm basename vào Router */}
+            <Router basename="/congcu">
                 <Routes>
                     <Route path="/" element={<Layout />}>
                         <Route index element={<MainContent />} />
