@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/congcu/static/css/main.ea2d0bfb.css",
+    "main.js": "/congcu/static/js/main.3e85f287.js",
+    "index.html": "/congcu/index.html",
+    "main.ea2d0bfb.css.map": "/congcu/static/css/main.ea2d0bfb.css.map",
+    "main.3e85f287.js.map": "/congcu/static/js/main.3e85f287.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ea2d0bfb.css",
+    "static/js/main.3e85f287.js"
+  ]
+}
