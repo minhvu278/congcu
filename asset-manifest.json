@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/congcu/static/css/main.ea2d0bfb.css",
-    "main.js": "/congcu/static/js/main.ec8f820e.js",
+    "main.css": "/congcu/static/css/main.2fa60bfc.css",
+    "main.js": "/congcu/static/js/main.2fb74b71.js",
     "index.html": "/congcu/index.html",
-    "main.ea2d0bfb.css.map": "/congcu/static/css/main.ea2d0bfb.css.map",
-    "main.ec8f820e.js.map": "/congcu/static/js/main.ec8f820e.js.map"
+    "main.2fa60bfc.css.map": "/congcu/static/css/main.2fa60bfc.css.map",
+    "main.2fb74b71.js.map": "/congcu/static/js/main.2fb74b71.js.map"
   },
   "entrypoints": [
-    "static/css/main.ea2d0bfb.css",
-    "static/js/main.ec8f820e.js"
+    "static/css/main.2fa60bfc.css",
+    "static/js/main.2fb74b71.js"
   ]
 }
