@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Grid, Avatar, Card, CardMedia, CardContent } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const articles = [
     {
@@ -32,6 +33,23 @@ const articles = [
     },
 ];
 
+// Custom styles for title
+const TitleTypography = styled(Typography)(({ theme }) => ({
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    WebkitLineClamp: 2,
+    textOverflow: 'ellipsis',
+}));
+
+// Custom styles for description
+const DescriptionTypography = styled(Typography)(({ theme }) => ({
+    mt: 1,
+    [theme.breakpoints.down('sm')]: {
+        display: 'none',
+    },
+}));
+
 const ArticleWithAuthor = () => {
     return (
         <Grid container spacing={2}>
@@ -40,27 +58,42 @@ const ArticleWithAuthor = () => {
                     <Card sx={{ display: 'flex' }}>
                         <CardMedia
                             component="img"
-                            sx={{ width: 160 }}
+                            sx={{ width: { xs: 100, sm: 160 }, height: 'auto' }} // Responsive image width and height
                             image={article.image}
                             alt={article.title}
                         />
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
-                                <Typography component="div" variant="h6">
+                                <TitleTypography component="div" variant="h6">
                                     {article.title}
-                                </Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                    <Avatar sx={{ width: 24, height: 24, mr: 1 }}>{article.author.charAt(0)}</Avatar>
-                                    <Typography variant="body2" color="text.secondary" component="div">
-                                        {article.author}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" component="div" sx={{ ml: 2 }}>
+                                </TitleTypography>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: { xs: 'flex-start', sm: 'center' }, // Align items responsive
+                                        mt: 1,
+                                        justifyContent: 'space-between', // Giãn cách giữa author và time
+                                        width: '100%', // Đảm bảo full width để space-between hoạt động
+                                    }}
+                                >
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <Avatar sx={{ width: 24, height: 24, mr: 1 }}>{article.author.charAt(0)}</Avatar>
+                                        <Typography variant="body2" color="text.secondary" component="div">
+                                            {article.author}
+                                        </Typography>
+                                    </Box>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        component="div"
+                                        sx={{ mt: { xs: 0.5, sm: 0 }, textAlign: { xs: 'left', sm: 'right' } }} // Responsive margin
+                                    >
                                         {article.time}
                                     </Typography>
                                 </Box>
-                                <Typography variant="body2" color="text.secondary" component="div" sx={{ mt: 1 }}>
+                                <DescriptionTypography variant="body2" color="text.secondary">
                                     {article.description}
-                                </Typography>
+                                </DescriptionTypography>
                             </CardContent>
                         </Box>
                     </Card>

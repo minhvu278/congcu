@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box, Typography, Grid, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
+import { Typography, Grid, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const newsItems = [
     {
         title: 'Tàu vũ trụ đầu tiên bay ngang qua Mặt trăng - Trái đất',
         image: 'https://via.placeholder.com/600x400',
-        link: '/article1', // Link đến bài viết
+        link: '/article1',
     },
     {
         title: 'Đây là cách dễ nhất để cài đặt lại Windows 11 và khắc phục sự cố!',
@@ -39,7 +39,18 @@ const MainNews = () => {
                                 alt={item.title}
                             />
                             <CardContent>
-                                <Typography gutterBottom variant="h6" component="div">
+                                <Typography
+                                    gutterBottom
+                                    variant="h6"
+                                    component="div"
+                                    sx={{
+                                        display: '-webkit-box',
+                                        WebkitBoxOrient: 'vertical',
+                                        overflow: 'hidden',
+                                        WebkitLineClamp: 2,
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                >
                                     {item.title}
                                 </Typography>
                             </CardContent>
