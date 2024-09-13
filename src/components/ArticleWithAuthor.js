@@ -1,39 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Avatar, Card, CardMedia, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
 
-const articles = [
-    {
-        title: 'Stt hay cho ngày cuối tuần',
-        image: 'https://via.placeholder.com/600x400',
-        author: 'PP',
-        time: '7 giờ',
-        description: 'Lời chúc cuối tuần hài hước sau đây sẽ giúp bạn và bạn bè xả stress...',
-    },
-    {
-        title: 'Hướng dẫn viết ghi chú địa điểm trên Apple Maps',
-        image: 'https://via.placeholder.com/600x400',
-        author: 'Nguyễn Trang',
-        time: '7 giờ',
-        description: 'Ứng dụng Apple Maps trên iOS 18 đã được cập nhật một số tính năng...',
-    },
-    {
-        title: 'Samsung Galaxy Ring không thể sửa chữa được, "hỏng là vứt"',
-        image: 'https://via.placeholder.com/600x400',
-        author: 'Phạm Hải',
-        time: '8 giờ',
-        description: 'Có vẻ như đây là một xu hướng mới nổi trong thế giới công nghệ...',
-    },
-    {
-        title: 'Cách thêm nhạc vào trang cá nhân Instagram',
-        image: 'https://via.placeholder.com/600x400',
-        author: 'Nguyễn Trang',
-        time: '8 giờ',
-        description: 'Instagram đang triển khai tính năng mới cho phép bạn thêm nhạc...',
-    },
-];
-
-// Custom styles for title
 const TitleTypography = styled(Typography)(({ theme }) => ({
     display: '-webkit-box',
     WebkitBoxOrient: 'vertical',
@@ -42,7 +11,6 @@ const TitleTypography = styled(Typography)(({ theme }) => ({
     textOverflow: 'ellipsis',
 }));
 
-// Custom styles for description
 const DescriptionTypography = styled(Typography)(({ theme }) => ({
     mt: 1,
     [theme.breakpoints.down('sm')]: {
@@ -51,6 +19,18 @@ const DescriptionTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const ArticleWithAuthor = () => {
+    const [articles, setArticles] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/articles')
+            .then(response => {
+                setArticles(response.data);
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
+            });
+    }, []);
+
     return (
         <Grid container spacing={2}>
             {articles.map((article, index) => (
@@ -58,8 +38,8 @@ const ArticleWithAuthor = () => {
                     <Card sx={{ display: 'flex' }}>
                         <CardMedia
                             component="img"
-                            sx={{ width: { xs: 100, sm: 160 }, height: 'auto' }} // Responsive image width and height
-                            image={article.image}
+                            sx={{ width: { xs: 100, sm: 160 }, height: 'auto' }}
+                            image={article.image || 'https://via.placeholder.com/600x400'}
                             alt={article.title}
                         />
                         <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -70,29 +50,31 @@ const ArticleWithAuthor = () => {
                                 <Box
                                     sx={{
                                         display: 'flex',
-                                        alignItems: { xs: 'flex-start', sm: 'center' }, // Align items responsive
+                                        alignItems: { xs: 'flex-start', sm: 'center' },
                                         mt: 1,
-                                        justifyContent: 'space-between', // Giãn cách giữa author và time
-                                        width: '100%', // Đảm bảo full width để space-between hoạt động
+                                        justifyContent: 'space-between',
+                                        width: '100%',
                                     }}
                                 >
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <Avatar sx={{ width: 24, height: 24, mr: 1 }}>{article.author.charAt(0)}</Avatar>
+                                        <Avatar sx={{ width: 24, height: 24, mr: 1 }}>
+                                            {article.user?.name.charAt(0) || 'A'}
+                                        </Avatar>
                                         <Typography variant="body2" color="text.secondary" component="div">
-                                            {article.author}
+                                            {article.user?.name || 'Unknown'}
                                         </Typography>
                                     </Box>
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
                                         component="div"
-                                        sx={{ mt: { xs: 0.5, sm: 0 }, textAlign: { xs: 'left', sm: 'right' } }} // Responsive margin
+                                        sx={{ mt: { xs: 0.5, sm: 0 }, textAlign: { xs: 'left', sm: 'right' } }}
                                     >
-                                        {article.time}
+                                        {new Date(article.created_at).toLocaleString()}
                                     </Typography>
                                 </Box>
                                 <DescriptionTypography variant="body2" color="text.secondary">
-                                    {article.description}
+                                    {article.excerpt}
                                 </DescriptionTypography>
                             </CardContent>
                         </Box>
