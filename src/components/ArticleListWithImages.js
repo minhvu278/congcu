@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Button, List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@mui/material';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const ArticleListWithImages = () => {
@@ -24,7 +25,7 @@ const ArticleListWithImages = () => {
                 <Grid container spacing={2}>
                     {articles.map((article, index) => (
                         <Grid item xs={12} md={6} key={index}>
-                            <ListItem alignItems="flex-start">
+                            <ListItem alignItems="flex-start" button component={Link} to={`/article/${article.slug}`}>
                                 <ListItemAvatar>
                                     <Avatar alt={article.title} src={article.image || 'https://via.placeholder.com/100'} />
                                 </ListItemAvatar>

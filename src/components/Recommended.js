@@ -10,6 +10,7 @@ const Recommended = () => {
         axios.get('http://localhost:8000/api/articles/featured')
             .then(response => {
                 setRecommendedItems(response.data);
+                console.log(response.data);
             })
             .catch(error => {
                 console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
@@ -23,8 +24,8 @@ const Recommended = () => {
             </Typography>
             <List>
                 {recommendedItems.map((item, index) => (
-                    <React.Fragment key={item.id}>
-                        <ListItem alignItems="flex-start" button component={Link} to={`/articles/${item.slug}`}>
+                    <React.Fragment key={item.id || index}>
+                        <ListItem alignItems="flex-start" button component={Link} to={item.slug ? `/article/${item.slug}` : '#'}>
                             <ListItemAvatar>
                                 <Avatar alt={item.title} src={item.image || 'https://via.placeholder.com/50'} />
                             </ListItemAvatar>
