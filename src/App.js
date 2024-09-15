@@ -4,6 +4,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Layout from './components/Layout';
 import MainContent from './pages/MainContent';
 import Technology from "./pages/Technology";
+import ArticleDetails from "./components/ArticleDetails";
+import NewsDetails from "./components/NewsDetails";
 
 const theme = createTheme({
     palette: {
@@ -45,12 +47,13 @@ const theme = createTheme({
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
-            {/* Thêm basename vào Router */}
             <Router basename="/congcu">
                 <Routes>
                     <Route path="/" element={<Layout />}>
                         <Route index element={<MainContent />} />
                         <Route path="technology" element={<Technology />} />
+                        <Route path="article/:slug" element={<ArticleDetails />} />
+                        <Route path="news/:slug" element={<NewsDetails />} />
                     </Route>
                 </Routes>
             </Router>

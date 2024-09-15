@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Avatar, Card, CardMedia, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const TitleTypography = styled(Typography)(({ theme }) => ({
@@ -44,7 +45,7 @@ const ArticleWithAuthor = () => {
                         />
                         <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
-                                <TitleTypography component="div" variant="h6">
+                                <TitleTypography component={Link} to={`/article/${article.slug}`} variant="h6">
                                     {article.title}
                                 </TitleTypography>
                                 <Box
