@@ -6,6 +6,12 @@ import MainContent from './pages/MainContent';
 import Technology from "./pages/Technology";
 import ArticleDetails from "./components/ArticleDetails";
 import NewsDetails from "./components/NewsDetails";
+import Window from "./pages/Window";
+import LearnIT from "./pages/LearnIT";
+import Download from "./pages/Download";
+import Extension from "./pages/Extension";
+import Science from "./pages/Science";
+import Application from "./pages/Application";
 
 const theme = createTheme({
     palette: {
@@ -52,6 +58,12 @@ const App = () => {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<MainContent />} />
                         <Route path="technology" element={<Technology />} />
+                        <Route path="window" element={<Window />} />
+                        <Route path="learnit" element={<LearnIT />} />
+                        <Route path="download" element={<Download />} />
+                        <Route path="extension" element={<Extension />} />
+                        <Route path="science" element={<Science />} />
+                        <Route path="application" element={<Application />} />
                         <Route path="article/:slug" element={<ArticleDetails />} />
                         <Route path="news/:slug" element={<NewsDetails />} />
                     </Route>

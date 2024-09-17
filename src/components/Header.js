@@ -113,13 +113,12 @@ const Header = () => {
                     <Toolbar component="nav" variant="dense" sx={{ justifyContent: 'center', borderTop: '1px solid #2E7D32', minHeight: '48px' }}>
                         <Button component={Link} to="/" startIcon={<HomeIcon />} sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Home</Button>
                         <Button component={Link} to="/technology" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Công nghệ</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Windows</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Học CNTT</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Download</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Tiện ích</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Khoa học</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Làng CN</Button>
-                        <Button sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Ứng dụng</Button>
+                        <Button component={Link} to="/window" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Windows</Button>
+                        <Button component={Link} to="/learnit" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Học CNTT</Button>
+                        <Button component={Link} to="/download" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Download</Button>
+                        <Button component={Link} to="/extension" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Tiện ích</Button>
+                        <Button component={Link} to="/science" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Khoa học</Button>
+                        <Button component={Link} to="/application" sx={{ fontSize: '14px', textTransform: 'none', color: '#FFFFFF' }}>Ứng dụng</Button>
                         <Box sx={{ flexGrow: 1 }} />
                         <Button
                             sx={{ fontSize: '14px', textTransform: 'none', display: 'flex', alignItems: 'center', color: '#FFFFFF' }}
