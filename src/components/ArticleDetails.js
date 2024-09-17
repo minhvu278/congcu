@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Avatar, CardMedia, Container } from '@mui/material';
 import axios from 'axios';
+import {useParams} from "react-router-dom";
 
 const ArticleDetails = () => {
     const { slug } = useParams();
