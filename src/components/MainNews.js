@@ -4,37 +4,37 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const MainNews = () => {
-    const [newsItems, setNewsItems] = useState([]); // Chứa tất cả các bài viết
-    const [visibleNews, setVisibleNews] = useState([]); // Chứa các bài viết hiển thị
-    const [currentPage, setCurrentPage] = useState(1); // Quản lý số trang hiện tại
-    const itemsPerPage = 6; // Số lượng bài viết hiển thị mỗi lần
+    const [newsItems, setNewsItems] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/news')
+        loadNews(currentPage);
+    }, [currentPage]);
+
+    const loadNews = (page) => {
+        axios.get(`http://localhost:8000/api/news?page=${page}`)
             .then(response => {
-                setNewsItems(response.data); // Lưu tất cả bài viết vào state
-                setVisibleNews(response.data.slice(0, itemsPerPage)); // Hiển thị 6 bài đầu tiên
+                const newNews = response.data.data; // Lấy dữ liệu từ API
+                setNewsItems(prevNewsItems => [...prevNewsItems, ...newNews]);
+                if (response.data.current_page >= response.data.last_page) {
+                    setHasMore(false);
+                }
             })
             .catch(error => {
                 console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
             });
-    }, []);
+    };
 
-    // Hàm xử lý khi bấm "Xem thêm"
-    const loadMore = () => {
-        const nextPage = currentPage + 1;
-        const startIndex = currentPage * itemsPerPage;
-        const newVisibleItems = newsItems.slice(startIndex, startIndex + itemsPerPage);
-
-        setVisibleNews([...visibleNews, ...newVisibleItems]); // Cập nhật bài viết hiển thị
-        setCurrentPage(nextPage); // Cập nhật số trang
+    const loadMoreNews = () => {
+        setCurrentPage(prevPage => prevPage + 1);
     };
 
     return (
         <Box>
             <Grid container spacing={2}>
-                {visibleNews.map((item, index) => (
-                    <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
+                {newsItems.map((item) => (
+                    <Grid item xs={12} sm={6} md={6} lg={6} key={item.id}>
                         <Card>
                             <CardActionArea component={Link} to={`/news/${item.slug}`}>
                                 <CardMedia
@@ -65,10 +65,9 @@ const MainNews = () => {
                 ))}
             </Grid>
 
-            {/* Nút "Xem thêm" */}
-            {visibleNews.length < newsItems.length && (
+            {hasMore && (
                 <Box textAlign="center" mt={4}>
-                    <Button variant="contained" onClick={loadMore}>
+                    <Button variant="contained" onClick={loadMoreNews}>
                         Xem thêm
                     </Button>
                 </Box>
