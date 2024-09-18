@@ -25,7 +25,7 @@ const Recommended = () => {
             <List>
                 {recommendedItems.map((item, index) => (
                     <React.Fragment key={item.id || index}>
-                        <ListItem alignItems="flex-start" button component={Link} to={item.slug ? `/article/${item.slug}` : '#'}>
+                        <ListItem alignItems="flex-start" button component={Link} to={`/article/${item.slug}`}>
                             <ListItemAvatar>
                                 <Avatar alt={item.title} src={item.image || 'https://via.placeholder.com/50'} />
                             </ListItemAvatar>

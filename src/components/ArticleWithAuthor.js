@@ -20,33 +20,35 @@ const DescriptionTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const ArticleWithAuthor = () => {
-    const [articles, setArticles] = useState([]); // Tất cả bài viết
-    const [visibleArticles, setVisibleArticles] = useState([]); // Bài viết hiển thị
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const articlesPerPage = 6; // Số bài viết mỗi trang
+    const [articles, setArticles] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalArticles, setTotalArticles] = useState(0);
+    const articlesPerPage = 6;
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/articles')
+        loadArticles(currentPage);
+    }, [currentPage]);
+
+    const loadArticles = (page) => {
+        axios.get(`http://localhost:8000/api/articles?page=${page}&limit=${articlesPerPage}`)
             .then(response => {
-                setArticles(response.data);
-                setVisibleArticles(response.data.slice(0, articlesPerPage)); // Hiển thị bài viết đầu tiên
+                const { articles: newArticles, total } = response.data;
+                setArticles(prevArticles => [...prevArticles, ...newArticles]);
+                setTotalArticles(total);
             })
             .catch(error => {
                 console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
             });
-    }, []);
+    };
 
     const loadMoreArticles = () => {
-        const nextPage = currentPage + 1;
-        const newVisibleArticles = articles.slice(0, nextPage * articlesPerPage);
-        setVisibleArticles(newVisibleArticles);
-        setCurrentPage(nextPage);
+        setCurrentPage(prevPage => prevPage + 1);
     };
 
     return (
         <Box>
             <Grid container spacing={2}>
-                {visibleArticles.map((article, index) => (
+                {articles.map((article, index) => (
                     <Grid item xs={12} key={index}>
                         <Card sx={{ display: 'flex' }}>
                             <CardMedia
@@ -97,7 +99,7 @@ const ArticleWithAuthor = () => {
             </Grid>
 
             {/* Nút "Xem thêm" */}
-            {visibleArticles.length < articles.length && (
+            {articles.length < totalArticles && (
                 <Box textAlign="center" mt={4}>
                     <Button variant="contained" onClick={loadMoreArticles}>
                         Xem thêm

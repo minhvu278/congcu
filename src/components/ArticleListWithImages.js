@@ -5,16 +5,31 @@ import axios from 'axios';
 
 const ArticleListWithImages = () => {
     const [articles, setArticles] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const articlesPerPage = 6;
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/articles/titles-images')
+        loadArticles(currentPage);
+    }, [currentPage]);
+
+    const loadArticles = (page) => {
+        axios.get(`http://localhost:8000/api/articles/titles-images?page=${page}&limit=${articlesPerPage}`)
             .then(response => {
-                setArticles(response.data);
+                const newArticles = response.data.data;
+                setArticles(prevArticles => [...prevArticles, ...newArticles]);
+                if (response.data.current_page >= response.data.last_page) {
+                    setHasMore(false);
+                }
             })
             .catch(error => {
                 console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
             });
-    }, []);
+    };
+
+    const loadMoreArticles = () => {
+        setCurrentPage(prevPage => prevPage + 1);
+    };
 
     return (
         <Box sx={{ marginTop: '20px' }}>
@@ -35,9 +50,14 @@ const ArticleListWithImages = () => {
                     ))}
                 </Grid>
             </List>
-            <Box textAlign="center" sx={{ marginTop: '20px' }}>
-                <Button variant="outlined">Xem thêm</Button>
-            </Box>
+
+            {hasMore && (
+                <Box textAlign="center" sx={{ marginTop: '20px' }}>
+                    <Button variant="outlined" onClick={loadMoreArticles}>
+                        Xem thêm
+                    </Button>
+                </Box>
+            )}
         </Box>
     );
 };

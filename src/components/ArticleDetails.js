@@ -48,9 +48,7 @@ const ArticleDetails = () => {
                 </Typography>
             </Box>
 
-            <Typography variant="body1" sx={{ mt: 4 }}>
-                {article.content}
-            </Typography>
+            <Typography variant="body1" sx={{ mt: 4 }} dangerouslySetInnerHTML={{ __html: article.content }} />
         </Container>
     );
 };

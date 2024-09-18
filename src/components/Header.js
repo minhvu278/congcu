@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Logo from '../congcu.webp'
 import {
     AppBar,
     Toolbar,
@@ -80,7 +81,7 @@ const Header = () => {
                 <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
                     {/* Logo */}
                     <Box display="flex" alignItems="center">
-                        <img src="/path/to/logo.png" alt="Logo" style={{ height: '40px', marginRight: '20px' }} />
+                        <img src={Logo} alt="Logo" style={{ height: '40px', marginRight: '20px' }} />
                     </Box>
 
                     {/* Thanh tìm kiếm */}
