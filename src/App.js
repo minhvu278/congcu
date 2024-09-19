@@ -12,6 +12,7 @@ import Download from "./pages/Download";
 import Extension from "./pages/Extension";
 import Science from "./pages/Science";
 import Application from "./pages/Application";
+import NotFound from './pages/NotFound';
 
 const theme = createTheme({
     palette: {
@@ -53,7 +54,7 @@ const theme = createTheme({
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
-            <Router basename="/congcu">
+            <Router basename="/">
                 <Routes>
                     <Route path="/" element={<Layout />}>
                         <Route index element={<MainContent />} />
@@ -66,6 +67,7 @@ const App = () => {
                         <Route path="application" element={<Application />} />
                         <Route path="article/:slug" element={<ArticleDetails />} />
                         <Route path="news/:slug" element={<NewsDetails />} />
+                        <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
             </Router>
