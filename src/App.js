@@ -54,7 +54,7 @@ const theme = createTheme({
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
-            <Router basename="/">
+            <Router>
                 <Routes>
                     <Route path="/" element={<Layout />}>
                         <Route index element={<MainContent />} />
