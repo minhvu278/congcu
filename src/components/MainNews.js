@@ -3,6 +3,8 @@ import { Typography, Grid, Card, CardMedia, CardContent, CardActionArea, Button,
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
+
 const MainNews = () => {
     const [newsItems, setNewsItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -13,9 +15,9 @@ const MainNews = () => {
     }, [currentPage]);
 
     const loadNews = (page) => {
-        axios.get(`http://localhost:8000/api/news?page=${page}`)
+        axios.get(`${apiUrl}/news?page=${page}`)
             .then(response => {
-                const newNews = response.data.data; // Lấy dữ liệu từ API
+                const newNews = response.data.data;
                 setNewsItems(prevNewsItems => [...prevNewsItems, ...newNews]);
                 if (response.data.current_page >= response.data.last_page) {
                     setHasMore(false);

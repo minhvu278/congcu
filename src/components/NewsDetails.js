@@ -3,13 +3,15 @@ import { useParams } from 'react-router-dom';
 import { Typography, CardMedia, Container } from '@mui/material';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
+
 const NewsDetails = () => {
     const { slug } = useParams();
     const [news, setNews] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/news/${slug}`)
+        axios.get(`${apiUrl}/news/${slug}`)
             .then(response => {
                 setNews(response.data);
                 setLoading(false);
