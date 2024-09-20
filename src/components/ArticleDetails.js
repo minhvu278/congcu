@@ -3,6 +3,8 @@ import { Box, Typography, Avatar, CardMedia, Container } from '@mui/material';
 import axios from 'axios';
 import {useParams} from "react-router-dom";
 
+const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
+
 const ArticleDetails = () => {
     const { slug } = useParams();
     const [article, setArticle] = useState(null);
@@ -10,7 +12,7 @@ const ArticleDetails = () => {
 
     useEffect(() => {
         if (slug) {
-            axios.get(`http://localhost:8000/api/articles/${slug}`)
+            axios.get(`${apiUrl}/articles/${slug}`)
                 .then(response => {
                     setArticle(response.data);
                     setLoading(false);

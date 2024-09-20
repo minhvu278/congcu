@@ -19,6 +19,8 @@ const DescriptionTypography = styled(Typography)(({ theme }) => ({
     },
 }));
 
+const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
+
 const ArticleWithAuthor = () => {
     const [articles, setArticles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +32,7 @@ const ArticleWithAuthor = () => {
     }, [currentPage]);
 
     const loadArticles = (page) => {
-        axios.get(`http://localhost:8000/api/articles?page=${page}&limit=${articlesPerPage}`)
+        axios.get(`${apiUrl}/articles?page=${page}&limit=${articlesPerPage}`)
             .then(response => {
                 const { articles: newArticles, total } = response.data;
                 setArticles(prevArticles => [...prevArticles, ...newArticles]);
@@ -98,7 +100,6 @@ const ArticleWithAuthor = () => {
                 ))}
             </Grid>
 
-            {/* Nút "Xem thêm" */}
             {articles.length < totalArticles && (
                 <Box textAlign="center" mt={4}>
                     <Button variant="contained" onClick={loadMoreArticles}>

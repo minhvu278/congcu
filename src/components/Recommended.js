@@ -3,11 +3,13 @@ import { Box, Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
+
 const Recommended = () => {
     const [recommendedItems, setRecommendedItems] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/articles/featured')
+        axios.get(`${apiUrl}/articles/featured`)
             .then(response => {
                 setRecommendedItems(response.data);
                 console.log(response.data);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Route, Routes} from 'react-router-dom';
+import {ThemeProvider, createTheme} from '@mui/material/styles';
 import Layout from './components/Layout';
 import MainContent from './pages/MainContent';
 import Technology from "./pages/Technology";
@@ -54,23 +54,21 @@ const theme = createTheme({
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={<MainContent />} />
-                        <Route path="technology" element={<Technology />} />
-                        <Route path="window" element={<Window />} />
-                        <Route path="learnit" element={<LearnIT />} />
-                        <Route path="download" element={<Download />} />
-                        <Route path="extension" element={<Extension />} />
-                        <Route path="science" element={<Science />} />
-                        <Route path="application" element={<Application />} />
-                        <Route path="article/:slug" element={<ArticleDetails />} />
-                        <Route path="news/:slug" element={<NewsDetails />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Route>
-                </Routes>
-            </Router>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    <Route index element={<MainContent/>}/>
+                    <Route path="technology" element={<Technology/>}/>
+                    <Route path="window" element={<Window/>}/>
+                    <Route path="learnit" element={<LearnIT/>}/>
+                    <Route path="download" element={<Download/>}/>
+                    <Route path="extension" element={<Extension/>}/>
+                    <Route path="science" element={<Science/>}/>
+                    <Route path="application" element={<Application/>}/>
+                    <Route path="article/:slug" element={<ArticleDetails/>}/>
+                    <Route path="news/:slug" element={<NewsDetails/>}/>
+                    <Route path="*" element={<NotFound/>}/>
+                </Route>
+            </Routes>
         </ThemeProvider>
     );
 };

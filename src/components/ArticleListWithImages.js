@@ -3,6 +3,8 @@ import { Box, Typography, Grid, Button, List, ListItem, ListItemText, ListItemAv
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
+
 const ArticleListWithImages = () => {
     const [articles, setArticles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +16,7 @@ const ArticleListWithImages = () => {
     }, [currentPage]);
 
     const loadArticles = (page) => {
-        axios.get(`http://localhost:8000/api/articles/titles-images?page=${page}&limit=${articlesPerPage}`)
+        axios.get(`${apiUrl}/articles/titles-images?page=${page}&limit=${articlesPerPage}`)
             .then(response => {
                 const newArticles = response.data.data;
                 setArticles(prevArticles => [...prevArticles, ...newArticles]);
