@@ -1,37 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Typography, Grid, Button, List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
 
+const fetchArticles = async ({ pageParam = 1 }) => {
+    const { data } = await axios.get(`${apiUrl}/articles/titles-images?page=${pageParam}&limit=6`);
+    return data;
+};
+
 const ArticleListWithImages = () => {
-    const [articles, setArticles] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const articlesPerPage = 6;
+    const {
+        data,
+        isLoading,
+        isError,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ['articles', 'titles-images'],
+        queryFn: fetchArticles,
+        getNextPageParam: (lastPage) => {
+            if (lastPage.current_page < lastPage.last_page) {
+                return lastPage.current_page + 1;
+            }
+            return undefined;
+        },
+    });
 
-    useEffect(() => {
-        loadArticles(currentPage);
-    }, [currentPage]);
+    if (isLoading) {
+        return <Typography>Loading...</Typography>;
+    }
 
-    const loadArticles = (page) => {
-        axios.get(`${apiUrl}/articles/titles-images?page=${page}&limit=${articlesPerPage}`)
-            .then(response => {
-                const newArticles = response.data.data;
-                setArticles(prevArticles => [...prevArticles, ...newArticles]);
-                if (response.data.current_page >= response.data.last_page) {
-                    setHasMore(false);
-                }
-            })
-            .catch(error => {
-                console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
-            });
-    };
-
-    const loadMoreArticles = () => {
-        setCurrentPage(prevPage => prevPage + 1);
-    };
+    if (isError) {
+        return <Typography>Có lỗi xảy ra khi lấy dữ liệu.</Typography>;
+    }
 
     return (
         <Box sx={{ marginTop: '20px' }}>
@@ -40,23 +45,25 @@ const ArticleListWithImages = () => {
             </Typography>
             <List>
                 <Grid container spacing={2}>
-                    {articles.map((article, index) => (
-                        <Grid item xs={12} md={6} key={index}>
-                            <ListItem alignItems="flex-start" button component={Link} to={`/article/${article.slug}`}>
-                                <ListItemAvatar>
-                                    <Avatar alt={article.title} src={article.image || 'https://via.placeholder.com/100'} />
-                                </ListItemAvatar>
-                                <ListItemText primary={article.title} />
-                            </ListItem>
-                        </Grid>
-                    ))}
+                    {data.pages.map((page) =>
+                        page.data.map((article, index) => (
+                            <Grid item xs={12} md={6} key={index}>
+                                <ListItem alignItems="flex-start" button component={Link} to={`/article/${article.slug}`}>
+                                    <ListItemAvatar>
+                                        <Avatar alt={article.title} src={article.image || 'https://via.placeholder.com/100'} />
+                                    </ListItemAvatar>
+                                    <ListItemText primary={article.title} />
+                                </ListItem>
+                            </Grid>
+                        ))
+                    )}
                 </Grid>
             </List>
 
-            {hasMore && (
+            {hasNextPage && (
                 <Box textAlign="center" sx={{ marginTop: '20px' }}>
-                    <Button variant="outlined" onClick={loadMoreArticles}>
-                        Xem thêm
+                    <Button variant="outlined" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                        {isFetchingNextPage ? 'Đang tải...' : 'Xem thêm'}
                     </Button>
                 </Box>
             )}

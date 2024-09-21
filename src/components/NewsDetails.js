@@ -1,32 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, CardMedia, Container } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
 
+const fetchNews = async (slug) => {
+    const { data } = await axios.get(`${apiUrl}/news/${slug}`);
+    return data;
+};
+
 const NewsDetails = () => {
     const { slug } = useParams();
-    const [news, setNews] = useState(null);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        axios.get(`${apiUrl}/news/${slug}`)
-            .then(response => {
-                setNews(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
-                setLoading(false);
-            });
-    }, [slug]);
+    const { data: news, isLoading, isError } = useQuery({
+        queryKey: ['news', slug],
+        queryFn: () => fetchNews(slug),
+        enabled: !!slug,
+    });
 
-    if (loading) {
+    if (isLoading) {
         return <Typography variant="h4">Đang tải...</Typography>;
     }
 
-    if (!news) {
+    if (isError || !news) {
         return <Typography variant="h4">Tin tức không tồn tại</Typography>;
     }
 

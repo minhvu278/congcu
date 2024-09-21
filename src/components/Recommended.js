@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
 
-const Recommended = () => {
-    const [recommendedItems, setRecommendedItems] = useState([]);
+const fetchRecommendedItems = async () => {
+    const { data } = await axios.get(`${apiUrl}/articles/featured`);
+    return data;
+};
 
-    useEffect(() => {
-        axios.get(`${apiUrl}/articles/featured`)
-            .then(response => {
-                setRecommendedItems(response.data);
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
-            });
-    }, []);
+const Recommended = () => {
+    const { data: recommendedItems, isLoading, isError } = useQuery({
+        queryKey: ['recommendedItems'],
+        queryFn: fetchRecommendedItems,
+    });
+
+    if (isLoading) {
+        return <Typography>Loading...</Typography>;
+    }
+
+    if (isError) {
+        return <Typography>Có lỗi xảy ra khi lấy dữ liệu.</Typography>;
+    }
 
     return (
         <Box>

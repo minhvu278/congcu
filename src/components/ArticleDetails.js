@@ -1,34 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Typography, Avatar, CardMedia, Container } from '@mui/material';
+import { useParams } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import {useParams} from "react-router-dom";
 
 const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
 
+const fetchArticle = async (slug) => {
+    const { data } = await axios.get(`${apiUrl}/articles/${slug}`);
+    return data;
+};
+
 const ArticleDetails = () => {
     const { slug } = useParams();
-    const [article, setArticle] = useState(null);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (slug) {
-            axios.get(`${apiUrl}/articles/${slug}`)
-                .then(response => {
-                    setArticle(response.data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
-                    setLoading(false);
-                });
-        }
-    }, [slug]);
+    const { data: article, isLoading, isError } = useQuery({
+        queryKey: ['article', slug],
+        queryFn: () => fetchArticle(slug),
+        enabled: !!slug, // Chỉ fetch khi slug tồn tại
+    });
 
-    if (loading) {
+    if (isLoading) {
         return <Typography variant="h4">Đang tải...</Typography>;
     }
 
-    if (!article) {
+    if (isError || !article) {
         return <Typography variant="h4">Bài viết không tồn tại</Typography>;
     }
 
@@ -43,7 +39,7 @@ const ArticleDetails = () => {
             />
 
             <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                <Avatar sx={{ mr: 2 }}>{article.user?.name.charAt(0) || 'A'}</Avatar>
+                <Avatar sx={{ mr: 2 }}>{article.user?.name?.charAt(0) || 'A'}</Avatar>
                 <Typography variant="body1" color="text.secondary">{article.user?.name || 'Unknown'}</Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ ml: 2 }}>
                     {new Date(article.created_at).toLocaleString()}

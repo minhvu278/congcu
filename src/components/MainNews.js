@@ -1,76 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { Typography, Grid, Card, CardMedia, CardContent, CardActionArea, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 const apiUrl = process.env.REACT_APP_CONG_CU_API_URL;
 
+const fetchNews = async ({ pageParam = 1 }) => {
+    const { data } = await axios.get(`${apiUrl}/news?page=${pageParam}`);
+    return data;
+};
+
 const MainNews = () => {
-    const [newsItems, setNewsItems] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
+    const {
+        data,
+        isLoading,
+        isError,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ['news'],
+        queryFn: fetchNews,
+        getNextPageParam: (lastPage) => {
+            if (lastPage.current_page < lastPage.last_page) {
+                return lastPage.current_page + 1;
+            }
+            return undefined;
+        },
+    });
 
-    useEffect(() => {
-        loadNews(currentPage);
-    }, [currentPage]);
+    if (isLoading) {
+        return <Typography>Loading...</Typography>;
+    }
 
-    const loadNews = (page) => {
-        axios.get(`${apiUrl}/news?page=${page}`)
-            .then(response => {
-                const newNews = response.data.data;
-                setNewsItems(prevNewsItems => [...prevNewsItems, ...newNews]);
-                if (response.data.current_page >= response.data.last_page) {
-                    setHasMore(false);
-                }
-            })
-            .catch(error => {
-                console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
-            });
-    };
-
-    const loadMoreNews = () => {
-        setCurrentPage(prevPage => prevPage + 1);
-    };
+    if (isError) {
+        return <Typography>Có lỗi xảy ra khi lấy dữ liệu.</Typography>;
+    }
 
     return (
         <Box>
             <Grid container spacing={2}>
-                {newsItems.map((item) => (
-                    <Grid item xs={12} sm={6} md={6} lg={6} key={item.id}>
-                        <Card>
-                            <CardActionArea component={Link} to={`/news/${item.slug}`}>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image={item.image || 'https://via.placeholder.com/600x400'}
-                                    alt={item.title}
-                                />
-                                <CardContent>
-                                    <Typography
-                                        gutterBottom
-                                        variant="h6"
-                                        component="div"
-                                        sx={{
-                                            display: '-webkit-box',
-                                            WebkitBoxOrient: 'vertical',
-                                            overflow: 'hidden',
-                                            WebkitLineClamp: 2,
-                                            textOverflow: 'ellipsis',
-                                        }}
-                                    >
-                                        {item.title}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
-                ))}
+                {data?.pages?.map((page) =>
+                    page.data.map((item) => (
+                        <Grid item xs={12} sm={6} md={6} lg={6} key={item.id}>
+                            <Card>
+                                <CardActionArea component={Link} to={`/news/${item.slug}`}>
+                                    <CardMedia
+                                        component="img"
+                                        height="140"
+                                        image={item.image || 'https://via.placeholder.com/600x400'}
+                                        alt={item.title}
+                                    />
+                                    <CardContent>
+                                        <Typography
+                                            gutterBottom
+                                            variant="h6"
+                                            component="div"
+                                            sx={{
+                                                display: '-webkit-box',
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden',
+                                                WebkitLineClamp: 2,
+                                                textOverflow: 'ellipsis',
+                                                minHeight: '3.2em',
+                                            }}
+                                        >
+                                            {item.title}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Grid>
+                    ))
+                )}
             </Grid>
 
-            {hasMore && (
+            {hasNextPage && (
                 <Box textAlign="center" mt={4}>
-                    <Button variant="contained" onClick={loadMoreNews}>
-                        Xem thêm
+                    <Button
+                        variant="contained"
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
+                    >
+                        {isFetchingNextPage ? 'Đang tải...' : 'Xem thêm'}
                     </Button>
                 </Box>
             )}
